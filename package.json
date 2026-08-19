@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "vite build",
+    "dev": "vite"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,7 @@
     "vite": "^8.2.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^6.0.5"
+    "@vitejs/plugin-react": "^6.0.5",
+    "vite": "^5.0.0"
   }
 }
