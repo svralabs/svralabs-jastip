@@ -21,15 +21,15 @@ jobs:
         id: config
         run: |
           if [ -f "deploy.json" ]; then
-            TARGET=$(jq -r '.target // "cloudflare"' deploy.json)
+            TARGET=$(jq -r '.target // "vps"' deploy.json)
             PROJECT_NAME=$(jq -r '.project_name // empty' deploy.json)
             DOMAIN=$(jq -r '.domain // empty' deploy.json)
-            OUTPUT_DIR=$(jq -r '.output_dir // empty' deploy.json)
+            OUTPUT_DIR=$(jq -r '.output_dir // "dist"' deploy.json)
           else
-            TARGET="cloudflare"
+            TARGET="vps"
             PROJECT_NAME=""
             DOMAIN=""
-            OUTPUT_DIR=""
+            OUTPUT_DIR="dist"
           fi
           
           if [ -z "$PROJECT_NAME" ]; then
@@ -40,7 +40,14 @@ jobs:
           echo "project_name=$PROJECT_NAME" >> "$GITHUB_OUTPUT"
           echo "domain=$DOMAIN" >> "$GITHUB_OUTPUT"
           echo "output_dir=$OUTPUT_DIR" >> "$GITHUB_OUTPUT"
+          echo "Target detected: $TARGET"
+          echo "Project Name: $PROJECT_NAME"
+          echo "Domain: $DOMAIN"
+          echo "Output Dir: $OUTPUT_DIR"
 
+      # -----------------------------------------------------------
+      # 1. DEPLOY TO CLOUDFLARE PAGES
+      # -----------------------------------------------------------
       - name: Build & Deploy to Cloudflare Pages
         if: steps.config.outputs.target == 'cloudflare'
         env:
@@ -48,29 +55,49 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           PROJECT_NAME: ${{ steps.config.outputs.project_name }}
           DOMAIN: ${{ steps.config.outputs.domain }}
-          SPECIFIED_DIR: ${{ steps.config.outputs.output_dir }}
+          OUTPUT_DIR: ${{ steps.config.outputs.output_dir }}
         run: |
           if [ -f "package.json" ]; then
-            npm install || npm ci
+            npm ci || npm install
             npm run build || true
           fi
-          
-          if [ -n "$SPECIFIED_DIR" ] && [ -d "$SPECIFIED_DIR" ]; then
-            DEPLOY_DIR="$SPECIFIED_DIR"
-          elif [ -d ".svelte-kit/cloudflare" ]; then
-            DEPLOY_DIR=".svelte-kit/cloudflare"
-          elif [ -d "dist" ]; then
-            DEPLOY_DIR="dist"
-          elif [ -d "build" ]; then
-            DEPLOY_DIR="build"
-          elif [ -d "out" ]; then
-            DEPLOY_DIR="out"
-          elif [ -d "public" ]; then
-            DEPLOY_DIR="public"
-          else
-            DEPLOY_DIR="."
-          fi
-          
-          echo "Deploying directory: $DEPLOY_DIR for project: $PROJECT_NAME"
           npx wrangler pages project create "$PROJECT_NAME" --production-branch=main || true
-          npx wrangler pages deploy "$DEPLOY_DIR" --project-name="$PROJECT_NAME" --branch=main --commit-dirty=true
+          npx wrangler pages deploy "$OUTPUT_DIR" --project-name="$PROJECT_NAME" --branch=main --commit-dirty=true
+          
+          if [ -n "$DOMAIN" ]; then
+            echo "Attaching custom domain: $DOMAIN"
+            npx wrangler pages project domain create "$DOMAIN" --project-name="$PROJECT_NAME" || true
+          fi
+
+      # -----------------------------------------------------------
+      # 2. DEPLOY TO VERCEL
+      # -----------------------------------------------------------
+      - name: Build & Deploy to Vercel
+        if: steps.config.outputs.target == 'vercel'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          DOMAIN: ${{ steps.config.outputs.domain }}
+        run: |
+          npm install -g vercel
+          vercel deploy --prod --token="$VERCEL_TOKEN" --scope="$VERCEL_ORG_ID" --yes
+          
+          if [ -n "$DOMAIN" ]; then
+            echo "Attaching custom domain to Vercel: $DOMAIN"
+            vercel domains add "$DOMAIN" --token="$VERCEL_TOKEN" --scope="$VERCEL_ORG_ID" || true
+          fi
+
+      # -----------------------------------------------------------
+      # 3. DEPLOY TO VPS (COOLIFY)
+      # -----------------------------------------------------------
+      - name: Trigger Coolify Webhook
+        if: steps.config.outputs.target == 'vps'
+        env:
+          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_URL }}
+        run: |
+          if [ -n "$COOLIFY_WEBHOOK_URL" ]; then
+            echo "Triggering Coolify deployment..."
+            curl -X POST "$COOLIFY_WEBHOOK_URL"
+          else
+            echo "No COOLIFY_WEBHOOK_URL secret set. Skipping."
+          fi
