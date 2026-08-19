@@ -1,0 +1,21 @@
+on
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "text": "Great products and excellent customer service!",
+    "rating": 5
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "text": "I've been using their products for years and I'm always satisfied.",
+    "rating": 4
+  },
+  {
+    "id": 3,
+    "name": "Mike Johnson",
+    "text": "Fast shipping and quality products. Highly recommend!",
+    "rating": 5
+  }
+]

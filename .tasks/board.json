@@ -1,0 +1,110 @@
+{
+  "project_name": "svralabs-jastip",
+  "architecture_summary": "React SPA with Vite. Frontend: 3 pages (Home, Catalog, Order Form). Backend: mock API routes in /api/*.js. State: React Context for cart. Routing: React Router v6. Styling: Tailwind CSS. No DB yet; mock data in src/data/*.json. Ponytail: replace mocks with real API when backend ready.",
+  "tickets": [
+    {
+      "id": "TASK-001",
+      "role": "frontend",
+      "model": "hermes-auto",
+      "title": "Scaffold App.jsx with navigation",
+      "description": "Create root component. Set up React Router. Add navigation bar with links to Home, Catalog, Order Form. Include cart icon with badge showing item count.",
+      "target_files": [
+        "src/App.jsx",
+        "src/main.jsx"
+      ],
+      "acceptance_criteria": [
+        "App renders without errors",
+        "Navigation bar visible on all pages",
+        "Cart badge updates when items added/removed",
+        "Routes: /, /catalog, /order"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "TASK-002",
+      "role": "frontend",
+      "model": "hermes-auto",
+      "title": "Build Home screen",
+      "description": "Create Home page. Hero banner with call-to-action. Featured items grid (3 items). How-it-works section (3 steps). Testimonials carousel. Footer with contact info.",
+      "target_files": [
+        "src/pages/Home.jsx",
+        "src/components/HeroBanner.jsx",
+        "src/components/FeaturedItems.jsx",
+        "src/components/HowItWorks.jsx",
+        "src/components/Testimonials.jsx",
+        "src/components/Footer.jsx"
+      ],
+      "acceptance_criteria": [
+        "Hero banner responsive, full-width",
+        "Featured items load from mock data",
+        "How-it-works steps numbered",
+        "Testimonials auto-scroll or manual navigation",
+        "Footer sticky at bottom"
+      ],
+      "status": "DONE"
+    },
+    {
+      "id": "TASK-003",
+      "role": "frontend",
+      "model": "hermes-auto",
+      "title": "Build Catalog screen",
+      "description": "Create Catalog page. Filter sidebar (category, price range). Product grid with pagination. Each product card show: image, name, price, add-to-cart button. Cart context update when item added.",
+      "target_files": [
+        "src/pages/Catalog.jsx",
+        "src/components/ProductGrid.jsx",
+        "src/components/FilterSidebar.jsx",
+        "src/context/CartContext.jsx"
+      ],
+      "acceptance_criteria": [
+        "Filters update product grid",
+        "Pagination works (10 items/page)",
+        "Add-to-cart button updates cart badge",
+        "Product images lazy-load"
+      ],
+      "status": "DONE"
+    },
+    {
+      "id": "TASK-004",
+      "role": "frontend",
+      "model": "hermes-auto",
+      "title": "Build Order Form screen",
+      "description": "Create Order Form page. Multi-step form: 1) Cart review, 2) Shipping info, 3) Payment, 4) Confirmation. Form validation for all fields. Submit button disabled until valid. Mock API call on submit.",
+      "target_files": [
+        "src/pages/OrderForm.jsx",
+        "src/components/CartReview.jsx",
+        "src/components/ShippingInfo.jsx",
+        "src/components/Payment.jsx",
+        "src/components/Confirmation.jsx"
+      ],
+      "acceptance_criteria": [
+        "Form steps navigate forward/back",
+        "Validation errors show on blur",
+        "Submit button disabled if invalid",
+        "Mock API call logs order data to console",
+        "Confirmation screen shows order summary"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "TASK-005",
+      "role": "frontend",
+      "model": "hermes-auto",
+      "title": "Create mock data and API routes",
+      "description": "Add mock data for products, testimonials. Create mock API routes for catalog fetch, order submit. Use Vite's built-in server for mock endpoints.",
+      "target_files": [
+        "src/data/products.json",
+        "src/data/testimonials.json",
+        "src/api/catalog.js",
+        "src/api/order.js"
+      ],
+      "acceptance_criteria": [
+        "GET /api/catalog returns product data",
+        "POST /api/order logs payload to console",
+        "Mock data matches UI requirements"
+      ],
+      "status": "DONE"
+    }
+  ],
+  "status": "IN_PROGRESS",
+  "updated_at": "2026-08-20 02:51:31"
+}
