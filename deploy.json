@@ -1,0 +1,5 @@
+{
+  "target": "cloudflare",
+  "project_name": "svralabs-jastip",
+  "domain": ""
+}
