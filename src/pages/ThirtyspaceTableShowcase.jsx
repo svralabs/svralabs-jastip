@@ -1,13 +1,14 @@
-import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ThirtyspaceTableShowcase() {
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen text-slate-100 font-sans">
       
-{/*  TopNavBar  */}
+
 <header className="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-primary border-b-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
 <div className="font-headline-main-mobile text-headline-main-mobile font-black text-on-primary">Thirtyspace</div>
 <nav className="hidden md:flex gap-lg items-center">
@@ -21,7 +22,7 @@ export default function ThirtyspaceTableShowcase() {
         </button>
 </header>
 <main className="flex-grow pt-32 pb-xl px-margin max-w-7xl mx-auto w-full">
-{/*  Hero Section  */}
+
 <section className="mb-xl">
 <div className="inline-block bg-black p-md md:p-lg mb-md">
 <h1 className="font-headline-main text-headline-main-mobile md:text-headline-main text-white uppercase leading-none">
@@ -32,7 +33,7 @@ export default function ThirtyspaceTableShowcase() {
                 High-contrast, brutalist table components designed for maximum legibility and structural impact. Built for data-heavy interfaces that refuse to be boring.
             </p>
 </section>
-{/*  Section 1: Standard Data Table  */}
+
 <section className="mb-xl">
 <div className="flex items-center gap-sm mb-lg">
 <span className="w-8 h-8 bg-accent-purple border-2 border-black rounded-full flex items-center justify-center brutalist-shadow">
@@ -130,7 +131,7 @@ export default function ThirtyspaceTableShowcase() {
 </table>
 </div>
 </section>
-{/*  Section 2: Interactive Table  */}
+
 <section className="mb-xl">
 <div className="flex items-center gap-sm mb-lg">
 <span className="w-8 h-8 bg-accent-orange border-2 border-black rounded-full flex items-center justify-center brutalist-shadow">
@@ -200,7 +201,7 @@ export default function ThirtyspaceTableShowcase() {
 </div>
 </div>
 </section>
-{/*  Section 3: Bento Preview Integration  */}
+
 <section className="mb-xl">
 <div className="flex items-center gap-sm mb-lg">
 <span className="w-8 h-8 bg-accent-pink border-2 border-black rounded-full flex items-center justify-center brutalist-shadow">
@@ -209,7 +210,7 @@ export default function ThirtyspaceTableShowcase() {
 <h2 className="font-heading-card text-heading-card text-on-surface">Bento Grid Context</h2>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-12 gap-lg h-full">
-{/*  Large Feature Card  */}
+
 <div className="md:col-span-8 brutalist-card p-lg bg-white flex flex-col">
 <div className="flex justify-between items-end mb-lg">
 <div>
@@ -276,7 +277,7 @@ export default function ThirtyspaceTableShowcase() {
 </table>
 </div>
 </div>
-{/*  Side Bento Components  */}
+
 <div className="md:col-span-4 flex flex-col gap-lg">
 <div className="brutalist-card p-lg bg-secondary-container flex-1">
 <span className="material-symbols-outlined text-4xl mb-md">analytics</span>
@@ -294,7 +295,7 @@ export default function ThirtyspaceTableShowcase() {
 </div>
 </section>
 </main>
-{/*  Footer  */}
+
 <footer className="w-full mt-auto py-xl px-margin flex flex-col md:flex-row justify-between items-center gap-md bg-surface border-t-2 border-black">
 <div className="flex flex-col items-center md:items-start">
 <div className="font-headline-main-mobile text-xl font-black text-on-surface">Thirtyspace</div>
@@ -303,8 +304,8 @@ export default function ThirtyspaceTableShowcase() {
 <div className="flex gap-lg">
 <a className="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a>
 <a className="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Terms</a>
-<a className="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Globe</a>
-<a className="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Globe</a>
+<a className="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Github</a>
+<a className="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Discord</a>
 </div>
 </footer>
 

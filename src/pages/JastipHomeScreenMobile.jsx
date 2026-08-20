@@ -1,13 +1,14 @@
-import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function JastipHomeScreenMobile() {
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen text-slate-100 font-sans">
       
-{/*  TopAppBar  */}
+
 <header className="fixed top-0 left-0 w-full z-50 px-margin h-16 flex items-center justify-between bg-primary border-b-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
 <div className="flex items-center gap-3">
 <div className="w-10 h-10 rounded-full border-2 border-black overflow-hidden bg-white">
@@ -21,21 +22,21 @@ export default function JastipHomeScreenMobile() {
 </button>
 </header>
 <main className="mt-24 px-margin">
-{/*  Hero Section / Search  */}
+
 <div className="mb-8">
 <div className="neubrutalist-card bg-secondary-container p-4 rounded-xl flex items-center gap-3">
 <span className="material-symbols-outlined text-black" data-icon="search">search</span>
 <input className="bg-transparent border-none focus:ring-0 w-full font-label-bold placeholder:text-on-secondary-container/60" placeholder="Cari jastip apa hari ini?" type="text"/>
 </div>
 </div>
-{/*  Event Aktif Section  */}
+
 <section className="mb-10">
 <div className="flex justify-between items-end mb-4">
 <h2 className="font-heading-card text-heading-card underline decoration-accent-pink decoration-4 underline-offset-4">Event Aktif</h2>
 <a className="font-label-bold text-sm underline" href="#">Lihat Semua</a>
 </div>
 <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar -mx-margin px-margin">
-{/*  Card 1  */}
+
 <div className="neubrutalist-card bg-white min-w-[280px] rounded-xl overflow-hidden flex-shrink-0">
 <div className="h-32 bg-accent-pink relative overflow-hidden">
 <img className="w-full h-full object-cover" data-alt="A dynamic shot of a busy shopping street in Bangkok at dusk, filled with glowing neon signs in Thai script. The image captures the energy of travel with vibrant pink and teal tones. High-contrast lighting and a wide-angle perspective emphasize the modern urban sprawl, fitting the bold neubrutalist aesthetic of the app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBV9FmSzHmMElYvNkNaTfltT1RizeUA5MnOa_GeoMEzL0q6X1-O1T46f8mKsCvFRWrz6gwZWzBgSS7I1PGoSG62Pq2la4upprHhrMVGFWaVYgRgKmTp97BXSMBxjv9x6fEGY--PL0Krb3ueee-vkZnX8HZd3z-5bU3sxy8T--wqD6SrHXNbnP1DKpMsTrcdRqhx6mYHwqNITOHVpGvNMc9jaJY_HGD-__MPpQcDnZ_Y5LoJnx76ZFA"/>
@@ -52,7 +53,7 @@ export default function JastipHomeScreenMobile() {
                         </button>
 </div>
 </div>
-{/*  Card 2  */}
+
 <div className="neubrutalist-card bg-white min-w-[280px] rounded-xl overflow-hidden flex-shrink-0">
 <div className="h-32 bg-accent-purple relative overflow-hidden">
 <img className="w-full h-full object-cover" data-alt="A collection of trendy Japanese snacks and skincare products arranged artistically on a clean white surface. The photo uses sharp, direct lighting to create deep shadows, echoing the neubrutalist style. Vibrant purples and blues dominate the color scheme, portraying a high-end personal shopping service vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcaaOGOzHT-EXDIW2kIpsuzjLU-qucF-5-XvOe5tI435Py-Fv4eJAhb0vTYU8ZlgBjaWKjXotacSwfH_h9wP3N_FNKvjcC0YFz_TexBrc6557xlzL2aCdkHkm22OFEEOPhAmqrMCyuSj039Jrq0Sl2PRan_KEPOj6Qpq6OqBKF0DHAhFXGeGYkJyLkPheJXl8KmwAwTlf8xmSOoNTukpbFoJuKbFb3BIDR8cWz1ITQ84y4S9YCKw4o"/>
@@ -70,7 +71,7 @@ export default function JastipHomeScreenMobile() {
 </div>
 </div>
 </section>
-{/*  Kalender Event Section  */}
+
 <section className="mb-10">
 <h2 className="font-heading-card text-heading-card mb-4 underline decoration-secondary-container decoration-4 underline-offset-4">Kalender Event</h2>
 <div className="neubrutalist-card bg-white rounded-xl p-4 mb-6">
@@ -86,7 +87,7 @@ export default function JastipHomeScreenMobile() {
 </div>
 </div>
 <div className="grid grid-cols-7 gap-1 text-center">
-{/*  Days header  */}
+
 <div className="text-[10px] font-bold opacity-50 uppercase">Sn</div>
 <div className="text-[10px] font-bold opacity-50 uppercase">Sl</div>
 <div className="text-[10px] font-bold opacity-50 uppercase">Rb</div>
@@ -94,7 +95,7 @@ export default function JastipHomeScreenMobile() {
 <div className="text-[10px] font-bold opacity-50 uppercase">Jm</div>
 <div className="text-[10px] font-bold opacity-50 uppercase">Sb</div>
 <div className="text-[10px] font-bold opacity-50 uppercase">Mg</div>
-{/*  Calendar days (sample)  */}
+
 <div className="h-8 flex items-center justify-center text-sm opacity-30">29</div>
 <div className="h-8 flex items-center justify-center text-sm opacity-30">30</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold">1</div>
@@ -102,7 +103,7 @@ export default function JastipHomeScreenMobile() {
 <div className="h-8 flex items-center justify-center text-sm font-bold">3</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold">4</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold">5</div>
-{/*  Week 2  */}
+
 <div className="h-8 flex items-center justify-center text-sm font-bold">6</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold">7</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold">8</div>
@@ -110,7 +111,7 @@ export default function JastipHomeScreenMobile() {
 <div className="h-8 flex items-center justify-center text-sm font-bold">10</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold">11</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-accent-pink rounded-md border-2 border-black">12</div>
-{/*  Week 3 (Event Highlighting)  */}
+
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-accent-pink/40 border-b-2 border-black">13</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-accent-pink/40 border-b-2 border-black">14</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-accent-pink/40 border-b-2 border-black">15</div>
@@ -118,7 +119,7 @@ export default function JastipHomeScreenMobile() {
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-accent-pink/40 border-b-2 border-black">17</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-accent-pink rounded-md border-2 border-black">18</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold">19</div>
-{/*  Week 4  */}
+
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-secondary-container rounded-md border-2 border-black">20</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-secondary-container/40 border-b-2 border-black">21</div>
 <div className="h-8 flex items-center justify-center text-sm font-bold bg-secondary-container/40 border-b-2 border-black">22</div>
@@ -128,7 +129,7 @@ export default function JastipHomeScreenMobile() {
 <div className="h-8 flex items-center justify-center text-sm font-bold">26</div>
 </div>
 </div>
-{/*  List of upcoming  */}
+
 <div className="space-y-4">
 <div className="neubrutalist-card bg-white p-4 rounded-xl flex items-center justify-between">
 <div className="flex items-center gap-4">
@@ -168,7 +169,7 @@ export default function JastipHomeScreenMobile() {
 </div>
 </div>
 </section>
-{/*  Promotional Bento Card  */}
+
 <section className="mb-10">
 <div className="neubrutalist-card bg-accent-purple text-white p-6 rounded-2xl relative overflow-hidden">
 <div className="relative z-10">
@@ -176,16 +177,16 @@ export default function JastipHomeScreenMobile() {
 <p className="font-body-md text-sm mb-4 max-w-[180px]">Buka jastip dan dapatkan cuan tambahan saat jalan-jalan!</p>
 <button className="neubrutalist-btn bg-white text-black px-6 py-2 rounded-full font-label-bold">Daftar Sekarang</button>
 </div>
-{/*  Abstract visual element  */}
+
 <div className="absolute -right-8 -bottom-8 w-40 h-40 border-4 border-black rotate-12 bg-primary-container rounded-3xl opacity-90"></div>
 <div className="absolute -right-4 -bottom-4 w-40 h-40 border-4 border-black rotate-45 bg-accent-pink rounded-3xl opacity-80"></div>
 </div>
 </section>
 </main>
-{/*  BottomNavBar  */}
+
 <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-surface py-2 px-4 border-t-2 border-black shadow-[0px_-4px_0px_0px_rgba(0,0,0,1)]">
 <a className="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container border-2 border-black rounded-full px-4 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:scale-95 transition-transform" href="#">
-<span className="material-symbols-outlined" data-icon="home" style={{ "fontVariationSettings": "'FILL' 1" }}>home</span>
+<span className="material-symbols-outlined" data-icon="home" style={{fontVariationSettings: '\'FILL\' 1'}}>home</span>
 <span className="font-label-bold text-[10px]">Beranda</span>
 </a>
 <a className="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant p-2 rounded-xl transition-colors active:scale-95" href="#">

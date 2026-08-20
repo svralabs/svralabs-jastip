@@ -1,13 +1,14 @@
-import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ThirtyspaceSidebarShowcase() {
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen text-slate-100 font-sans">
       
-{/*  Top Navigation Bar (Shared Component Reference)  */}
+
 <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-lg h-16 bg-primary-fixed border-b-2 border-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
 <div className="flex items-center gap-md">
 <span className="font-headline-main text-heading-card text-on-primary-fixed">Thirtyspace</span>
@@ -28,9 +29,9 @@ export default function ThirtyspaceSidebarShowcase() {
 </div>
 </div>
 </nav>
-{/*  Main Content Area  */}
+
 <main className="pt-32 pb-xl px-lg max-w-7xl mx-auto">
-{/*  Header Title Section  */}
+
 <header className="mb-xl">
 <div className="inline-block bg-black px-lg py-sm border-2 border-black neubrutalist-shadow">
 <h1 className="font-headline-main text-headline-card text-white">SIDEBAR VARIANTS</h1>
@@ -39,16 +40,16 @@ export default function ThirtyspaceSidebarShowcase() {
                 A definitive collection of navigation shells designed for maximum density, clear hierarchy, and bold interaction states. Built with hard shadows and strict mechanical depth.
             </p>
 </header>
-{/*  Bento Grid Layout  */}
+
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-xl">
-{/*  1. Standard Expanded Sidebar  */}
+
 <div className="lg:col-span-4 flex flex-col gap-md">
 <div className="bg-surface border-2 border-black p-xs rounded-xl neubrutalist-shadow h-[700px] overflow-hidden flex flex-col">
 <div className="p-md flex items-center justify-between border-b-2 border-black bg-surface-container">
 <span className="font-label-bold text-lg">Expanded</span>
 <span className="bg-primary-container px-2 py-0.5 border-2 border-black rounded text-[10px] font-bold">DEFAULT</span>
 </div>
-{/*  The Actual Sidebar Component  */}
+
 <div className="flex-grow flex flex-col p-md bg-background">
 <div className="flex items-center gap-sm mb-lg">
 <div className="w-10 h-10 bg-black flex items-center justify-center rounded-lg">
@@ -60,12 +61,12 @@ export default function ThirtyspaceSidebarShowcase() {
 </div>
 </div>
 <nav className="flex flex-col gap-sm flex-grow">
-{/*  Dashboard (Active)  */}
+
 <a className="flex items-center gap-md p-md bg-secondary-container text-on-secondary-container border-2 border-black neubrutalist-shadow-sm rounded-xl font-label-bold text-label-bold" href="#">
 <span className="material-symbols-outlined" data-icon="dashboard">dashboard</span>
 <span>Dashboard</span>
 </a>
-{/*  Inactive items  */}
+
 <a className="flex items-center gap-md p-md text-on-surface hover:bg-surface-container-high hover:translate-x-1 transition-transform font-label-bold text-label-bold" href="#">
 <span className="material-symbols-outlined" data-icon="folder_open">folder_open</span>
 <span>Projects</span>
@@ -96,13 +97,13 @@ export default function ThirtyspaceSidebarShowcase() {
 </div>
 </div>
 </div>
-{/*  2. Mini / Collapsed Sidebar  */}
+
 <div className="lg:col-span-3 flex flex-col gap-md">
 <div className="bg-surface border-2 border-black p-xs rounded-xl neubrutalist-shadow h-[700px] overflow-hidden flex flex-col">
 <div className="p-md flex items-center justify-between border-b-2 border-black bg-surface-container">
 <span className="font-label-bold text-lg text-center w-full">Mini</span>
 </div>
-{/*  The Actual Mini Sidebar  */}
+
 <div className="flex-grow flex flex-col items-center py-lg px-2 bg-background-alt">
 <div className="w-12 h-12 bg-black flex items-center justify-center rounded-xl mb-xl border-2 border-black neubrutalist-shadow-sm">
 <span className="text-white font-black text-xl">T</span>
@@ -135,14 +136,14 @@ export default function ThirtyspaceSidebarShowcase() {
 </div>
 </div>
 </div>
-{/*  3. Categorized / Hierarchical Sidebar  */}
+
 <div className="lg:col-span-5 flex flex-col gap-md">
 <div className="bg-surface border-2 border-black p-xs rounded-xl neubrutalist-shadow h-[700px] overflow-hidden flex flex-col">
 <div className="p-md flex items-center justify-between border-b-2 border-black bg-surface-container">
 <span className="font-label-bold text-lg">Hierarchical</span>
 <span className="bg-accent-pink px-2 py-0.5 border-2 border-black rounded text-[10px] font-bold">COMPLEX</span>
 </div>
-{/*  The Actual Categorized Sidebar  */}
+
 <div className="flex-grow flex flex-col p-lg bg-surface">
 <div className="flex items-center justify-between mb-xl">
 <span className="font-headline-main text-heading-card">TS.</span>
@@ -151,7 +152,7 @@ export default function ThirtyspaceSidebarShowcase() {
 </button>
 </div>
 <div className="space-y-xl">
-{/*  Section: Workspace  */}
+
 <section>
 <h4 className="text-[11px] font-black tracking-widest text-on-surface-variant mb-md px-md uppercase flex items-center gap-xs">
 <span className="w-2 h-2 bg-accent-orange border-[1px] border-black rounded-full"></span>
@@ -173,7 +174,7 @@ export default function ThirtyspaceSidebarShowcase() {
                                     </a>
 </div>
 </section>
-{/*  Section: Resources  */}
+
 <section>
 <h4 className="text-[11px] font-black tracking-widest text-on-surface-variant mb-md px-md uppercase flex items-center gap-xs">
 <span className="w-2 h-2 bg-secondary-container border-[1px] border-black rounded-full"></span>
@@ -193,7 +194,7 @@ export default function ThirtyspaceSidebarShowcase() {
                                     </a>
 </div>
 </section>
-{/*  Section: Account  */}
+
 <section>
 <h4 className="text-[11px] font-black tracking-widest text-on-surface-variant mb-md px-md uppercase flex items-center gap-xs">
 <span className="w-2 h-2 bg-accent-pink border-[1px] border-black rounded-full"></span>
@@ -226,7 +227,7 @@ export default function ThirtyspaceSidebarShowcase() {
 </div>
 </div>
 </div>
-{/*  Footer Stats / Feature Matrix  */}
+
 <section className="mt-xl grid grid-cols-1 md:grid-cols-3 gap-lg">
 <div className="bg-primary-fixed border-2 border-black p-lg rounded-xl neubrutalist-shadow">
 <h3 className="font-headline-main text-xl mb-xs">84%</h3>
@@ -242,7 +243,7 @@ export default function ThirtyspaceSidebarShowcase() {
 </div>
 </section>
 </main>
-{/*  Floating Action Button Context Check  */}
+
 <button className="fixed bottom-lg right-lg w-16 h-16 bg-accent-orange border-2 border-black rounded-full neubrutalist-shadow active-press flex items-center justify-center group">
 <span className="material-symbols-outlined text-white text-3xl group-hover:rotate-90 transition-transform">add</span>
 </button>

@@ -1,13 +1,14 @@
-import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ThirtyspaceHeroSection() {
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen text-slate-100 font-sans">
       
-{/*  TopNavBar  */}
+
 <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin py-sm bg-primary-container border-b-2 border-on-surface">
 <div className="flex items-center gap-sm">
 <span className="text-label-bold font-label-bold text-on-primary-container tracking-tighter text-xl">TS THIRTYSPACE</span>
@@ -22,7 +23,7 @@ export default function ThirtyspaceHeroSection() {
             MULAI GRATIS
         </button>
 </nav>
-{/*  Ticker Bar  */}
+
 <div className="mt-[64px] bg-white border-b-2 border-on-surface overflow-hidden py-3">
 <div className="flex whitespace-nowrap animate-marquee">
 <div className="flex items-center space-x-12 px-6">
@@ -38,7 +39,7 @@ export default function ThirtyspaceHeroSection() {
 <span className="text-2xl font-bold">/</span>
 <span className="font-label-bold text-label-bold flex items-center gap-2"><span className="material-symbols-outlined text-sm">rocket_launch</span> STARTUP X</span>
 </div>
-{/*  Duplicated for seamless loop  */}
+
 <div className="flex items-center space-x-12 px-6">
 <span className="font-label-bold text-label-bold flex items-center gap-2"><span className="material-symbols-outlined text-sm">code</span> DEV TEAM ALPHA</span>
 <span className="text-2xl font-bold">/</span>
@@ -54,7 +55,7 @@ export default function ThirtyspaceHeroSection() {
 </div>
 </div>
 </div>
-{/*  Hero Section  */}
+
 <main className="max-w-7xl mx-auto px-margin pt-20 pb-40">
 <div className="flex flex-col items-center text-center mb-16">
 <h1 className="font-headline-main text-headline-main text-on-surface mb-6">
@@ -65,9 +66,9 @@ export default function ThirtyspaceHeroSection() {
                 Tinggalkan tab browser yang menumpuk. Pindah ke Thirtyspace. Ruang kerja kolaboratif paling berisik tapi paling rapi.
             </p>
 </div>
-{/*  Feature Grid (4 columns)  */}
+
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
-{/*  Card 1: Yellow  */}
+
 <div className="bg-primary-container neubrutal-border neubrutal-shadow rounded-xl p-md flex flex-col justify-between h-48 hover-lift">
 <div className="flex justify-between items-start">
 <span className="material-symbols-outlined text-4xl">view_kanban</span>
@@ -75,7 +76,7 @@ export default function ThirtyspaceHeroSection() {
 </div>
 <h3 className="font-heading-card text-heading-card uppercase">SPRINT BOARD</h3>
 </div>
-{/*  Card 2: Cyan  */}
+
 <div className="bg-cyan-neubrutalist neubrutal-border neubrutal-shadow rounded-xl p-md flex flex-col justify-between h-48 hover-lift">
 <div className="flex justify-between items-start">
 <span className="material-symbols-outlined text-4xl">video_call</span>
@@ -83,7 +84,7 @@ export default function ThirtyspaceHeroSection() {
 </div>
 <h3 className="font-heading-card text-heading-card uppercase">VIDEO CALL</h3>
 </div>
-{/*  Card 3: Pink  */}
+
 <div className="bg-accent-pink neubrutal-border neubrutal-shadow rounded-xl p-md flex flex-col justify-between h-48 hover-lift">
 <div className="flex justify-between items-start">
 <span className="material-symbols-outlined text-4xl">edit_note</span>
@@ -91,7 +92,7 @@ export default function ThirtyspaceHeroSection() {
 </div>
 <h3 className="font-heading-card text-heading-card uppercase">SHARED NOTES</h3>
 </div>
-{/*  Card 4: Purple  */}
+
 <div className="bg-purple-neubrutalist neubrutal-border neubrutal-shadow rounded-xl p-md flex flex-col justify-between h-48 hover-lift text-white">
 <div className="flex justify-between items-start">
 <span className="material-symbols-outlined text-4xl">link</span>
@@ -100,9 +101,9 @@ export default function ThirtyspaceHeroSection() {
 <h3 className="font-heading-card text-heading-card uppercase">LINK HUB</h3>
 </div>
 </div>
-{/*  Bento Preview Card (Large Wide)  */}
+
 <div className="bg-white neubrutal-border neubrutal-shadow rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[400px]">
-{/*  Left Info  */}
+
 <div className="lg:col-span-5 p-12 flex flex-col justify-center border-b-2 lg:border-b-0 lg:border-r-2 border-on-surface">
 <div className="mb-6">
 <span className="bg-primary-container neubrutal-border px-4 py-1 rounded-full font-label-bold text-label-bold uppercase">
@@ -127,17 +128,17 @@ export default function ThirtyspaceHeroSection() {
                     </div>
 </div>
 </div>
-{/*  Right Preview Mockup  */}
+
 <div className="lg:col-span-7 bg-surface-container p-8 relative overflow-hidden flex items-center justify-center">
-{/*  Mockup Content  */}
+
 <div className="w-full aspect-video bg-white neubrutal-border neubrutal-shadow rounded-lg p-6 relative">
-{/*  Fake UI Header  */}
+
 <div className="flex gap-2 mb-6">
 <div className="w-3 h-3 rounded-full bg-error border border-on-surface"></div>
 <div className="w-3 h-3 rounded-full bg-primary-container border border-on-surface"></div>
 <div className="w-3 h-3 rounded-full bg-secondary-container border border-on-surface"></div>
 </div>
-{/*  Workspace lines  */}
+
 <div className="space-y-4">
 <div className="h-4 w-3/4 bg-surface-container-highest rounded-full"></div>
 <div className="h-4 w-1/2 bg-surface-container-highest rounded-full"></div>
@@ -148,7 +149,7 @@ export default function ThirtyspaceHeroSection() {
 <div className="h-24 bg-accent-pink/20 neubrutal-border rounded-lg border-dashed"></div>
 </div>
 </div>
-{/*  Multiplayer Cursors  */}
+
 <div className="absolute top-20 left-40 flex items-center gap-1 group transition-all duration-300 hover:translate-x-10">
 <span className="material-symbols-outlined text-primary scale-125 rotate-[-20deg]">near_me</span>
 <span className="bg-primary-container neubrutal-border px-2 py-0.5 text-[10px] font-label-bold rounded shadow-sm">ahdi kf</span>
@@ -162,13 +163,13 @@ export default function ThirtyspaceHeroSection() {
 <span className="bg-accent-pink neubrutal-border px-2 py-0.5 text-[10px] font-label-bold rounded shadow-sm">guest</span>
 </div>
 </div>
-{/*  Background decorative elements  */}
+
 <div className="absolute top-0 right-0 w-32 h-32 bg-accent-orange/10 rounded-full blur-3xl"></div>
 <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
 </div>
 </div>
 </main>
-{/*  Footer Partial from Shared Components  */}
+
 <footer className="w-full px-margin py-xl flex flex-col md:flex-row justify-between items-center bg-surface-container-highest border-t-2 border-on-surface">
 <div className="mb-md md:mb-0">
 <span className="text-heading-card font-heading-card text-primary">Thirtyspace.</span>
@@ -182,7 +183,7 @@ export default function ThirtyspaceHeroSection() {
 <a className="font-label-bold text-label-bold text-on-surface-variant hover:text-accent-orange transition-colors" href="#">Contact Us</a>
 </div>
 </footer>
-{/*  Simple Interactivity Scripts  */}
+
 
 
     </div>

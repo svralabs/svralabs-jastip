@@ -1,13 +1,14 @@
-import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ThirtyspaceComponentShowcaseInputs() {
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen text-slate-100 font-sans">
       
-{/*  TopAppBar  */}
+
 <header className="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-primary border-b-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
 <div className="font-headline-main-mobile text-headline-main-mobile font-black text-on-primary">
             Thirtyspace
@@ -23,7 +24,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
         </button>
 </header>
 <main className="pt-32 pb-xl px-margin flex-grow max-w-7xl mx-auto w-full">
-{/*  Hero Section  */}
+
 <section className="text-center mb-xl">
 <h1 className="font-headline-main-mobile md:text-headline-main font-black inline-block px-md py-xs bg-black text-white transform -rotate-1 mb-md">
                 BUTTON VARIANTS
@@ -32,9 +33,9 @@ export default function ThirtyspaceComponentShowcaseInputs() {
                 The atomic foundation of our interactive ecosystem. Built with pure neubrutalist principles: heavy borders, mechanical depth, and high-impact color tokens.
             </p>
 </section>
-{/*  Showcase Grid  */}
+
 <div className="grid grid-cols-1 md:grid-cols-2 gap-xl">
-{/*  Category 1: Brand Colors  */}
+
 <div className="bg-surface border-2 border-black rounded-xl p-lg neubrutalist-shadow">
 <h3 className="font-heading-card text-heading-card mb-lg uppercase tracking-tight border-b-2 border-black pb-xs inline-block">BRAND COLORS</h3>
 <div className="flex flex-wrap gap-md mt-md">
@@ -45,7 +46,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
 <button className="neubrutalist-btn bg-accent-orange text-white px-lg py-sm rounded-full text-label-bold">Accent Orange</button>
 </div>
 </div>
-{/*  Category 2: Sizes  */}
+
 <div className="bg-surface border-2 border-black rounded-xl p-lg neubrutalist-shadow">
 <h3 className="font-heading-card text-heading-card mb-lg uppercase tracking-tight border-b-2 border-black pb-xs inline-block">SIZES</h3>
 <div className="flex items-end gap-md mt-md">
@@ -54,7 +55,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
 <button className="neubrutalist-btn bg-primary-container text-on-primary-container px-xl py-md rounded-full text-xl font-extrabold">Large</button>
 </div>
 </div>
-{/*  Category 3: States  */}
+
 <div className="bg-surface border-2 border-black rounded-xl p-lg neubrutalist-shadow">
 <h3 className="font-heading-card text-heading-card mb-lg uppercase tracking-tight border-b-2 border-black pb-xs inline-block">STATES (MOCKUP)</h3>
 <div className="flex flex-wrap gap-md mt-md">
@@ -75,7 +76,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
                     Interactive simulation: The actual CSS handles the translation via :hover and :active pseudo-classes.
                 </p>
 </div>
-{/*  Category 4: Icons  */}
+
 <div className="bg-surface border-2 border-black rounded-xl p-lg neubrutalist-shadow">
 <h3 className="font-heading-card text-heading-card mb-lg uppercase tracking-tight border-b-2 border-black pb-xs inline-block">WITH ICONS</h3>
 <div className="flex flex-wrap gap-md mt-md">
@@ -88,7 +89,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
                         <span className="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
 </button>
 <button className="neubrutalist-btn bg-white text-black px-sm py-sm rounded-full text-label-bold w-12 h-12">
-<span className="material-symbols-outlined" data-icon="favorite" data-weight="fill" style={{ "fontVariationSettings": "'FILL' 1" }}>favorite</span>
+<span className="material-symbols-outlined" data-icon="favorite" data-weight="fill" style={{fontVariationSettings: '\'FILL\' 1'}}>favorite</span>
 </button>
 <button className="neubrutalist-btn bg-black text-white px-lg py-sm rounded-lg text-label-bold">
 <span className="material-symbols-outlined" data-icon="add">add</span>
@@ -98,7 +99,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
 </div><div className="bg-surface border-2 border-black rounded-xl p-lg neubrutalist-shadow md:col-span-2">
 <h3 className="font-heading-card text-heading-card mb-lg uppercase tracking-tight border-b-2 border-black pb-xs inline-block">INPUT VARIANTS</h3>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-xl mt-md">
-{/*  Search & Text Inputs  */}
+
 <div className="flex flex-col gap-lg">
 <div className="flex flex-col gap-xs">
 <label className="text-xs font-label-bold text-on-surface-variant uppercase">Search Input</label>
@@ -121,7 +122,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
 </select>
 </div>
 </div>
-{/*  Checkbox & Radio  */}
+
 <div className="flex flex-col gap-lg">
 <div className="flex flex-col gap-md">
 <label className="text-xs font-label-bold text-on-surface-variant uppercase">Selection Controls</label>
@@ -152,7 +153,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
 </div>
 </div>
 </div>
-{/*  Bento Card: Complex UI Usage  */}
+
 <div className="md:col-span-2 bg-accent-pink/10 border-2 border-black rounded-xl p-xl neubrutalist-shadow overflow-hidden relative group">
 <div className="absolute top-0 right-0 p-lg opacity-20 pointer-events-none transform group-hover:rotate-12 transition-transform">
 <span className="material-symbols-outlined !text-9xl" data-icon="ads_click">ads_click</span>
@@ -183,7 +184,7 @@ export default function ThirtyspaceComponentShowcaseInputs() {
 </div>
 </div>
 </main>
-{/*  Footer  */}
+
 <footer className="w-full mt-auto py-xl px-margin flex flex-col md:flex-row justify-between items-center gap-md bg-surface border-t-2 border-black">
 <div className="font-headline-main-mobile text-xl font-black text-on-surface">
             Thirtyspace
@@ -194,8 +195,8 @@ export default function ThirtyspaceComponentShowcaseInputs() {
 <div className="flex gap-lg">
 <a className="text-on-surface-variant font-body-md hover:text-primary transition-colors" href="#">Privacy</a>
 <a className="text-on-surface-variant font-body-md hover:text-primary transition-colors" href="#">Terms</a>
-<a className="text-on-surface-variant font-body-md hover:text-primary transition-colors" href="#">Globe</a>
-<a className="text-accent-purple font-bold font-body-md hover:text-primary transition-colors" href="#">Globe</a>
+<a className="text-on-surface-variant font-body-md hover:text-primary transition-colors" href="#">Github</a>
+<a className="text-accent-purple font-bold font-body-md hover:text-primary transition-colors" href="#">Discord</a>
 </div>
 </footer>
 
