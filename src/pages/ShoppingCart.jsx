@@ -1,129 +1,127 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
 
 export default function ShoppingCart() {
-  const [activeTab, setActiveTab] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const { state, dispatch, cartTotal } = useStore();
+  const { cart } = state;
+
+  function updateQty(productId, qty) {
+    dispatch({ type: 'UPDATE_QTY', productId: productId, qty: qty });
+  }
+
+  function removeItem(productId) {
+    dispatch({ type: 'REMOVE_FROM_CART', productId: productId });
+    dispatch({ type: 'SHOW_TOAST', message: 'Item dihapus dari keranjang', toastType: 'info' });
+  }
+
+  function goCheckout() {
+    if (cart.length === 0) {
+      dispatch({ type: 'SHOW_TOAST', message: 'Keranjang masih kosong!', toastType: 'error' });
+      return;
+    }
+    navigate('/customer-checkout-form');
+  }
+
+  const serviceFeeTotal = cart.reduce(function(s,i){ return s + i.product.service_fee * i.qty; }, 0);
+  const productTotal = cart.reduce(function(s,i){ return s + i.product.price_idr * i.qty; }, 0);
 
   return (
-    <div className="w-full min-h-screen text-slate-100 font-sans">
-      
+    <div className="w-full min-h-screen bg-[#F5F0FF] font-sans pb-40">
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md px-4 py-4 flex items-center gap-3 shadow-sm">
+        <button onClick={function(){ navigate(-1); }} className="w-9 h-9 flex items-center justify-center rounded-full bg-purple-100 text-purple-700">
+          <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+        </button>
+        <h1 className="font-bold text-lg text-gray-800 flex-1">Keranjang Belanja</h1>
+        {cart.length > 0 && (
+          <button
+            onClick={function(){ dispatch({type:'CLEAR_CART'}); dispatch({type:'SHOW_TOAST', message:'Keranjang dikosongkan', toastType:'info'}); }}
+            className="text-xs text-red-400 font-semibold"
+          >Hapus Semua</button>
+        )}
+      </header>
 
-<header className="fixed top-0 left-0 w-full z-50 bg-background flex justify-between items-center px-screen-margin py-md">
-<div className="flex items-center gap-md">
-<button className="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container transition-transform active:scale-95">
-<span className="material-symbols-outlined text-primary">arrow_back</span>
-</button>
-<h1 className="font-headline-md text-headline-md font-bold text-primary">Your Cart</h1>
-</div>
-<div className="w-10 h-10 rounded-full overflow-hidden bg-primary-fixed clay-card">
-<img className="w-full h-full object-cover" data-alt="A professional high-quality studio portrait of a smiling young person with warm lighting and a soft bokeh background. The aesthetic is clean, modern, and youthful, matching the friendly Claymorphism design system with pastel purple and white tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEX2_5MxfvK81b2QVJse3-TauomwqHh6YAe9JExzcSJWNoRtNKlowbPaHM7SmuepqJ7czny4JMa9Gnf72bD9Tu1C6eB3P9SvNOFbOWvNwt4cSERL4JlNC7NXDBv62lU2ztCbYKZ2tku82QxmPOXYOl2j6fQMvxUiWyzx-UDQzdyZ1_rEE0z4MwvSVxQISXiybKKoqSaOUtjfK1oVmYZgaqJDJQdrQo4T-HW8i98ffEJa4npeQ3EoZ6_Q"/>
-</div>
-</header>
-<main className="mt-20 px-screen-margin space-y-grid-gap">
+      {cart.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-32 px-8 text-center">
+          <span className="material-symbols-outlined text-7xl text-purple-200">shopping_bag</span>
+          <h2 className="text-xl font-bold text-gray-700 mt-4">Keranjang Kosong</h2>
+          <p className="text-gray-400 text-sm mt-2">Yuk tambahkan produk titipan dari katalog kami!</p>
+          <button
+            onClick={function(){ navigate('/product-catalog'); }}
+            className="mt-6 bg-purple-600 text-white px-8 py-3 rounded-2xl font-bold text-sm hover:bg-purple-700 active:scale-95 transition-all"
+          >Lihat Katalog</button>
+        </div>
+      ) : (
+        <div className="px-4 pt-4 space-y-3">
+          {cart.map(function(item) {
+            return (
+              <div key={item.product.id} className="bg-white rounded-3xl p-4 flex gap-3 items-center shadow-sm">
+                <img
+                  src={item.product.image}
+                  alt={item.product.name}
+                  className="w-20 h-20 rounded-2xl object-cover flex-shrink-0"
+                  onError={function(e){ e.target.src = 'https://placehold.co/80x80/EDE9FE/7C3AED?text=?'; }}
+                />
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] bg-purple-100 text-purple-600 font-bold px-2 py-0.5 rounded-full">{item.product.destination}</span>
+                  <h3 className="font-bold text-gray-800 text-sm mt-1 leading-tight truncate">{item.product.name}</h3>
+                  <p className="text-purple-700 font-bold mt-1">Rp {(item.product.price_idr * item.qty).toLocaleString('id-ID')}</p>
+                  <p className="text-[10px] text-gray-400">+Rp {(item.product.service_fee * item.qty).toLocaleString('id-ID')} biaya jastip</p>
+                </div>
+                <div className="flex flex-col items-end gap-3 flex-shrink-0">
+                  <button onClick={function(){ removeItem(item.product.id); }} className="text-red-300 hover:text-red-500 transition-colors">
+                    <span className="material-symbols-outlined text-[20px]">delete</span>
+                  </button>
+                  <div className="flex items-center bg-purple-50 rounded-full px-1 py-1 gap-1">
+                    <button
+                      onClick={function(){ updateQty(item.product.id, item.qty - 1); }}
+                      className="w-7 h-7 flex items-center justify-center bg-white rounded-full text-purple-700 shadow-sm active:scale-90 transition-transform"
+                    ><span className="material-symbols-outlined text-[16px]">remove</span></button>
+                    <span className="px-2 font-bold text-gray-700 text-sm min-w-[20px] text-center">{item.qty}</span>
+                    <button
+                      onClick={function(){ updateQty(item.product.id, item.qty + 1); }}
+                      className="w-7 h-7 flex items-center justify-center bg-purple-600 rounded-full text-white shadow-sm active:scale-90 transition-transform"
+                    ><span className="material-symbols-outlined text-[16px]">add</span></button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
 
-<div className="flex items-center gap-sm mt-4">
-<span className="material-symbols-outlined text-secondary text-[20px]" style={{fontVariationSettings: '\'FILL\' 1'}}>local_mall</span>
-<h2 className="font-headline-md text-body-md font-bold text-on-surface uppercase tracking-wider">Bangkok Sale</h2>
-</div>
+          {/* Order Summary */}
+          <div className="bg-white rounded-3xl p-4 space-y-3 shadow-sm mt-2">
+            <h3 className="font-bold text-gray-700">Ringkasan Pesanan</h3>
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>Harga Produk</span>
+              <span className="font-semibold">Rp {productTotal.toLocaleString('id-ID')}</span>
+            </div>
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>Biaya Jastip</span>
+              <span className="font-semibold">Rp {serviceFeeTotal.toLocaleString('id-ID')}</span>
+            </div>
+            <div className="border-t border-purple-100 pt-3 flex justify-between">
+              <span className="font-bold text-gray-800">Total Estimasi</span>
+              <span className="font-bold text-purple-700 text-lg">Rp {cartTotal.toLocaleString('id-ID')}</span>
+            </div>
+            <p className="text-[11px] text-gray-400 bg-purple-50 rounded-xl p-3">
+              * Biaya packing & pengiriman akhir akan dikonfirmasi oleh admin setelah pesanan masuk.
+            </p>
+          </div>
+        </div>
+      )}
 
-<div className="grid grid-cols-1 gap-grid-gap">
-
-<div className="clay-card bg-surface p-md rounded-2xl flex gap-md items-center group">
-<div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 bg-primary-fixed border-4 border-white clay-card">
-<img className="w-full h-full object-cover" data-alt="A close-up shot of a trendy Thai designer handbag in soft lilac leather, presented on a minimalist platform. The lighting is soft and diffused to emphasize the matte, tactile texture, fitting the pillowy Claymorphic aesthetic of the health and wellness app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtANHVuFK2hh66As02APMFNFUcob1Xh59aStzsce5B3FN0_ivN9q25gZ3VFj9KpIKgWdtAYEkU2j6_iUeenO3cjP2L5KAt3daVk32Kh4hO2Nc4eA1uehuz22sz8N4WVFGSP1G51oPiwVGv6CsE0qm7SesxKHUT3SXs_G72QAsTEtVfXhikJwrCTyHaFokF7rM6NM5ij32Xx51LJMh-d04jO2vUpU2xsziwqBe0Sv9P61d2WEww29nrkg"/>
-</div>
-<div className="flex-grow flex flex-col justify-between h-24 py-1">
-<div>
-<h3 className="font-body-md text-body-md font-bold text-on-surface leading-tight">Gentlewoman Canvas Tote</h3>
-<p className="font-caption-sm text-caption-sm text-text-secondary mt-xs">Premium Edition • Beige</p>
-</div>
-<div className="flex justify-between items-end">
-<span className="font-headline-md text-primary font-bold">฿790</span>
-<div className="clay-counter bg-surface-container rounded-full flex items-center px-1 py-1">
-<button className="w-7 h-7 flex items-center justify-center text-primary hover:bg-white rounded-full transition-colors active:scale-90">
-<span className="material-symbols-outlined text-[18px]">remove</span>
-</button>
-<span className="px-3 font-bold text-on-surface">1</span>
-<button className="w-7 h-7 flex items-center justify-center text-primary hover:bg-white rounded-full transition-colors active:scale-90">
-<span className="material-symbols-outlined text-[18px]">add</span>
-</button>
-</div>
-</div>
-</div>
-<button className="text-error opacity-40 hover:opacity-100 transition-opacity p-1">
-<span className="material-symbols-outlined">delete</span>
-</button>
-</div>
-
-<div className="clay-card bg-surface p-md rounded-2xl flex gap-md items-center group">
-<div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 bg-primary-fixed border-4 border-white clay-card">
-<img className="w-full h-full object-cover" data-alt="A set of high-quality organic Thai skincare products in elegant pastel packaging. The setting is bright and airy with soft shadows, highlighting the clean and friendly wellness theme of the application. High-end product photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfObMVNMTGHQUgHI51iLdJnmPzcXg06Wn0gpqBu9QU7p7KdrTjc4fFU9AsNesIEakWqUoT-au2L_o-UnPL4kBbeD6DsuJfyXvmgGOCmIrqQFGQbNS3GEyOLoFZCytgZee2GXIi62moWMpwKZyuP6djbG25fB5GryeuOyA4qvexbfuRQnOPLShyA6_k9bVdr2IE2UMV5qkJeyFZ0TAfN94qB2RAPB5ZMsEVXsxdN8WlhLf2yZdPPi28OA"/>
-</div>
-<div className="flex-grow flex flex-col justify-between h-24 py-1">
-<div>
-<h3 className="font-body-md text-body-md font-bold text-on-surface leading-tight">Mistine Glow Serum</h3>
-<p className="font-caption-sm text-caption-sm text-text-secondary mt-xs">Skin Brightening • 30ml</p>
-</div>
-<div className="flex justify-between items-end">
-<span className="font-headline-md text-primary font-bold">฿450</span>
-<div className="clay-counter bg-surface-container rounded-full flex items-center px-1 py-1">
-<button className="w-7 h-7 flex items-center justify-center text-primary hover:bg-white rounded-full transition-colors active:scale-90">
-<span className="material-symbols-outlined text-[18px]">remove</span>
-</button>
-<span className="px-3 font-bold text-on-surface">2</span>
-<button className="w-7 h-7 flex items-center justify-center text-primary hover:bg-white rounded-full transition-colors active:scale-90">
-<span className="material-symbols-outlined text-[18px]">add</span>
-</button>
-</div>
-</div>
-</div>
-<button className="text-error opacity-40 hover:opacity-100 transition-opacity p-1">
-<span className="material-symbols-outlined">delete</span>
-</button>
-</div>
-</div>
-
-<div className="clay-card bg-secondary-container p-xl rounded-2xl mt-4 space-y-md">
-<div className="flex justify-between items-center">
-<span className="font-body-md text-on-secondary-container opacity-80">Product Total</span>
-<span className="font-headline-md text-on-secondary-container font-bold">฿1,690</span>
-</div>
-<div className="flex justify-between items-center">
-<span className="font-body-md text-on-secondary-container opacity-80">Est. Admin Fee</span>
-<span className="font-headline-md text-on-secondary-container font-bold">฿150</span>
-</div>
-<hr className="border-on-secondary-container opacity-10"/>
-<div className="flex gap-sm items-start bg-white/30 p-md rounded-xl">
-<span className="material-symbols-outlined text-on-secondary-container text-[20px]" style={{fontVariationSettings: '\'FILL\' 1'}}>info</span>
-<p className="font-caption-sm text-on-secondary-container leading-tight">Final shipping/packing fees will be adjusted by admin later.</p>
-</div>
-</div>
-</main>
-
-<div className="fixed bottom-32 left-0 w-full px-screen-margin z-40">
-<button className="w-full clay-button bg-primary-container text-on-primary py-lg rounded-full font-headline-md text-body-md font-bold transition-all hover:brightness-105 active:scale-95 flex items-center justify-center gap-sm">
-            Lanjut ke Pembayaran
+      {cart.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-purple-100">
+          <button
+            onClick={goCheckout}
+            className="w-full bg-purple-600 text-white py-4 rounded-2xl font-bold text-base hover:bg-purple-700 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-200"
+          >
+            <span>Lanjut ke Checkout</span>
             <span className="material-symbols-outlined">chevron_right</span>
-</button>
-</div>
-
-<nav className="fixed bottom-lg left-0 right-0 mx-auto z-50 flex justify-around items-center h-16 px-md bg-inverse-surface dark:bg-surface-container-highest fixed bottom-lg left-1/2 -translate-x-1/2 w-[calc(100%-32px)] rounded-full shadow-2xl">
-<a className="flex items-center justify-center text-surface-variant dark:text-on-surface-variant w-12 h-12 hover:scale-110 transition-transform active:scale-90 transition-all duration-200 ease-out" href="#">
-<span className="material-symbols-outlined">grid_view</span>
-</a>
-<a className="flex items-center justify-center text-surface-variant dark:text-on-surface-variant w-12 h-12 hover:scale-110 transition-transform active:scale-90 transition-all duration-200 ease-out" href="#">
-<span className="material-symbols-outlined">fitness_center</span>
-</a>
-<a className="flex items-center justify-center bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container rounded-full w-12 h-12 hover:scale-110 transition-transform active:scale-90 transition-all duration-200 ease-out" href="#">
-<span className="material-symbols-outlined" style={{fontVariationSettings: '\'FILL\' 1'}}>favorite</span>
-</a>
-<a className="flex items-center justify-center text-surface-variant dark:text-on-surface-variant w-12 h-12 hover:scale-110 transition-transform active:scale-90 transition-all duration-200 ease-out" href="#">
-<span className="material-symbols-outlined">person</span>
-</a>
-</nav>
-
-
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,96 +1,172 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
 
 export default function CustomerCheckoutForm() {
-  const [activeTab, setActiveTab] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const { state, dispatch, cartTotal } = useStore();
+  const { cart } = state;
+
+  const [form, setForm] = useState({ name: '', phone: '', address: '', notes: '' });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  function validate() {
+    const e = {};
+    if (!form.name.trim()) e.name = 'Nama wajib diisi';
+    if (!form.phone.trim()) e.phone = 'No. HP wajib diisi';
+    else if (!/^[0-9+]{10,15}$/.test(form.phone.replace(/\s/g,''))) e.phone = 'Format no. HP tidak valid';
+    if (!form.address.trim()) e.address = 'Alamat pengiriman wajib diisi';
+    return e;
+  }
+
+  function handleChange(field, value) {
+    setForm(function(prev){ return Object.assign({}, prev, {[field]: value}); });
+    if (errors[field]) setErrors(function(prev){ const n = Object.assign({}, prev); delete n[field]; return n; });
+  }
+
+  function handleSubmit() {
+    const e = validate();
+    if (Object.keys(e).length > 0) {
+      setErrors(e);
+      dispatch({ type: 'SHOW_TOAST', message: 'Lengkapi data terlebih dahulu', toastType: 'error' });
+      return;
+    }
+    setSubmitting(true);
+    setTimeout(function() {
+      dispatch({ type: 'PLACE_ORDER', total: cartTotal, customer: form });
+      dispatch({ type: 'SHOW_TOAST', message: 'Pesanan berhasil dikirim!', toastType: 'success' });
+      navigate('/order-history-status');
+    }, 1200);
+  }
+
+  if (cart.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#F5F0FF] px-8 text-center">
+        <span className="material-symbols-outlined text-6xl text-purple-200">shopping_bag</span>
+        <p className="text-gray-500 mt-4">Keranjang kosong. Tambahkan produk dulu!</p>
+        <button onClick={function(){ navigate('/product-catalog'); }} className="mt-4 bg-purple-600 text-white px-6 py-3 rounded-2xl font-bold text-sm">
+          Ke Katalog
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full min-h-screen text-slate-100 font-sans">
-      
-
-    
-    <header className="w-full top-0 sticky z-40 bg-background flex items-center justify-between px-screen-margin py-md shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
-        <button className="w-11 h-11 flex items-center justify-center rounded-full hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-200" aria-label="Go Back">
-            <span className="material-symbols-outlined text-primary text-2xl" data-original-icon="arrow_back">arrow_back</span>
+    <div className="w-full min-h-screen bg-[#F5F0FF] font-sans pb-40">
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md px-4 py-4 flex items-center gap-3 shadow-sm">
+        <button onClick={function(){ navigate(-1); }} className="w-9 h-9 flex items-center justify-center rounded-full bg-purple-100 text-purple-700">
+          <span className="material-symbols-outlined text-[20px]">arrow_back</span>
         </button>
-        <h1 className="font-headline-md text-headline-md-mobile text-primary">Checkout</h1>
-        <button className="w-11 h-11 flex items-center justify-center rounded-full hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-200" aria-label="Help">
-            <span className="material-symbols-outlined text-primary text-2xl">help</span>
-        </button>
-    </header>
+        <h1 className="font-bold text-lg text-gray-800">Form Checkout</h1>
+      </header>
 
-    <main className="px-screen-margin mt-lg space-y-grid-gap">
-        
-        
-        <section className="space-y-sm">
-            <h2 className="font-h2 text-h2 text-text-dark px-xs">Data Penerima</h2>
-            
-            
-            <div className="bg-surface clay-card rounded-input p-xs">
-                <div className="clay-input-inset rounded-input px-lg py-md bg-surface"><label className="block text-xs font-label-pill text-text-secondary mb-1" htmlFor="nama">Nama Penerima</label><input className="w-full bg-transparent border-none focus:ring-0 p-0 text-text-dark font-body-md placeholder:text-outline-variant" id="nama" placeholder="Masukkan nama lengkap" type="text" style={{fontFamily: '&quot'}} /></div>
-            </div>
-
-            
-            <div className="bg-surface clay-card rounded-input p-xs">
-                <div className="clay-input-inset rounded-input px-lg py-md bg-surface"><label className="block text-xs font-label-pill text-text-secondary mb-1" htmlFor="alamat">Alamat Lengkap</label><textarea className="w-full bg-transparent border-none focus:ring-0 p-0 text-text-dark font-body-md placeholder:text-outline-variant resize-none" id="alamat" placeholder="Masukkan alamat pengiriman detail..." rows="3" style={{fontFamily: '&quot'}}></textarea></div>
-            </div>
-
-            
-            <div className="bg-surface clay-card rounded-input p-xs">
-                <div className="clay-input-inset rounded-input px-lg py-md bg-surface"><label className="block text-xs font-label-pill text-text-secondary mb-1" htmlFor="phone">No. Telepon</label><input className="w-full bg-transparent border-none focus:ring-0 p-0 text-text-dark font-body-md placeholder:text-outline-variant" id="phone" placeholder="0812 XXXX XXXX" type="tel" style={{fontFamily: '&quot'}} /></div>
-            </div>
-        </section>
-
-        
-        <section className="mt-lg">
-            <div className="bg-accent-blue/40 clay-card rounded-[32px] p-2xl overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-accent-blue/30 blur-3xl rounded-full -mr-16 -mt-16"></div>
-                
-                <h3 className="font-h2 text-h2 text-on-primary-container mb-lg">Order Overview</h3>
-                
-                <div className="space-y-md relative z-10">
-                    <div className="flex justify-between items-center text-on-primary-container/80">
-                        <span className="font-body-md">Product Total</span>
-                        <span className="font-label-pill">Rp 450.000</span>
-                    </div>
-                    <div className="flex justify-between items-center text-on-primary-container/80">
-                        <span className="font-body-md">Admin Fee</span>
-                        <span className="font-label-pill">Rp 2.500</span>
-                    </div>
-                    <div className="flex justify-between items-center text-on-primary-container/80 pb-md border-b border-on-primary-container/10">
-                        <span className="font-body-md">Shipping</span>
-                        <span className="font-label-pill">Rp 15.000</span>
-                    </div>
-                    <div className="flex justify-between items-center pt-md">
-                        <span className="font-h2 text-h2 text-on-primary-container">Grand Total</span>
-                        <span className="font-h1 text-h1 text-primary">Rp 467.500</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        
-        <div className="pt-lg">
-            <button className="clay-button w-full bg-primary-container text-on-primary-container font-h2 text-h2 py-xl rounded-full active:scale-95 transition-all duration-300 ease-out flex items-center justify-center gap-sm">
-                <span className="">Kirim Pesanan</span>
-                <span className="material-symbols-outlined">send</span>
-            </button>
+      <div className="px-4 pt-4 space-y-4">
+        {/* Order summary strip */}
+        <div className="bg-purple-600 text-white rounded-3xl p-4 flex justify-between items-center">
+          <div>
+            <p className="text-xs opacity-80">{cart.length} item dalam keranjang</p>
+            <p className="text-xl font-bold">Rp {cartTotal.toLocaleString('id-ID')}</p>
+          </div>
+          <span className="material-symbols-outlined text-3xl opacity-50">shopping_cart</span>
         </div>
-    </main>
 
-    
-    <nav className="fixed bottom-4 left-4 right-4 rounded-full z-50 h-16 bg-text-dark flex justify-around items-center px-4 w-[calc(100%-32px)] shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
-        <button className="flex items-center justify-center text-surface-variant/60 w-12 h-12 hover:scale-110 active:scale-90 transition-all">
-            <span className="material-symbols-outlined">home</span>
+        {/* Form fields */}
+        <div className="bg-white rounded-3xl p-4 space-y-4 shadow-sm">
+          <h3 className="font-bold text-gray-700 text-base">Data Pemesan</h3>
+
+          {[
+            { field: 'name', label: 'Nama Lengkap', icon: 'person', placeholder: 'Contoh: Fahmi Faza', type: 'text' },
+            { field: 'phone', label: 'No. HP / WhatsApp', icon: 'phone', placeholder: '08xx-xxxx-xxxx', type: 'tel' },
+          ].map(function(f) {
+            return (
+              <div key={f.field}>
+                <label className="text-xs font-bold text-gray-500 mb-1.5 block">{f.label}</label>
+                <div className={'flex items-center bg-purple-50 rounded-2xl px-3 py-3 gap-2 border ' + (errors[f.field] ? 'border-red-400' : 'border-transparent')}>
+                  <span className="material-symbols-outlined text-purple-400 text-[20px]">{f.icon}</span>
+                  <input
+                    type={f.type}
+                    placeholder={f.placeholder}
+                    value={form[f.field]}
+                    onChange={function(e){ handleChange(f.field, e.target.value); }}
+                    className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
+                  />
+                </div>
+                {errors[f.field] && <p className="text-red-400 text-xs mt-1 pl-1">{errors[f.field]}</p>}
+              </div>
+            );
+          })}
+
+          <div>
+            <label className="text-xs font-bold text-gray-500 mb-1.5 block">Alamat Pengiriman</label>
+            <div className={'flex bg-purple-50 rounded-2xl px-3 py-3 gap-2 border ' + (errors.address ? 'border-red-400' : 'border-transparent')}>
+              <span className="material-symbols-outlined text-purple-400 text-[20px] mt-0.5">location_on</span>
+              <textarea
+                rows={3}
+                placeholder="Jl. Merdeka No. 1, Kota, Provinsi, Kode Pos"
+                value={form.address}
+                onChange={function(e){ handleChange('address', e.target.value); }}
+                className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 resize-none"
+              />
+            </div>
+            {errors.address && <p className="text-red-400 text-xs mt-1 pl-1">{errors.address}</p>}
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-gray-500 mb-1.5 block">Catatan (opsional)</label>
+            <div className="flex bg-purple-50 rounded-2xl px-3 py-3 gap-2">
+              <span className="material-symbols-outlined text-purple-400 text-[20px] mt-0.5">notes</span>
+              <textarea
+                rows={2}
+                placeholder="Ukuran, warna, atau instruksi khusus..."
+                value={form.notes}
+                onChange={function(e){ handleChange('notes', e.target.value); }}
+                className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 resize-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Items recap */}
+        <div className="bg-white rounded-3xl p-4 shadow-sm">
+          <h3 className="font-bold text-gray-700 mb-3">Item Pesanan</h3>
+          {cart.map(function(item) {
+            return (
+              <div key={item.product.id} className="flex justify-between items-center py-2 border-b border-purple-50 last:border-0">
+                <div className="flex-1 min-w-0 pr-2">
+                  <p className="text-sm font-semibold text-gray-700 truncate">{item.product.name}</p>
+                  <p className="text-xs text-gray-400">{item.qty}x • {item.product.destination}</p>
+                </div>
+                <p className="text-sm font-bold text-purple-700 flex-shrink-0">Rp {((item.product.price_idr + item.product.service_fee) * item.qty).toLocaleString('id-ID')}</p>
+              </div>
+            );
+          })}
+          <div className="flex justify-between pt-3 border-t border-purple-100 mt-2">
+            <span className="font-bold text-gray-800">Total</span>
+            <span className="font-bold text-purple-700 text-lg">Rp {cartTotal.toLocaleString('id-ID')}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-purple-100">
+        <button
+          onClick={handleSubmit}
+          disabled={submitting}
+          className={'w-full py-4 rounded-2xl font-bold text-base transition-all flex items-center justify-center gap-2 shadow-lg ' + (submitting ? 'bg-purple-300 text-white cursor-not-allowed' : 'bg-purple-600 text-white hover:bg-purple-700 active:scale-95 shadow-purple-200')}
+        >
+          {submitting ? (
+            <>
+              <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+              Memproses Pesanan...
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-outlined">send</span>
+              Kirim Pesanan
+            </>
+          )}
         </button>
-        <button className="flex items-center justify-center bg-primary-container text-on-primary-container rounded-full w-12 h-12 shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-90 transition-all">
-            <span className="material-symbols-outlined" style={{fontVariationSettings: '\'FILL\' 1'}}>shopping_bag</span>
-        </button>
-        <button className="flex items-center justify-center text-surface-variant/60 w-12 h-12 hover:scale-110 active:scale-90 transition-all">
-            <span className="material-symbols-outlined">receipt_long</span>
-        </button>
-        </nav>
+      </div>
     </div>
   );
 }

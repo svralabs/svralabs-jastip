@@ -1,141 +1,128 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
+import products from '../data/jastip_products.json';
+
+const CATEGORIES = ['Semua', 'Fashion', 'Beauty', 'Food & Snack'];
+const DESTINATIONS = ['Semua', 'Bangkok', 'Jepang'];
 
 export default function ProductCatalog() {
-  const [activeTab, setActiveTab] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const { dispatch, cartCount } = useStore();
+  const [activeCategory, setActiveCategory] = useState('Semua');
+  const [activeDest, setActiveDest] = useState('Semua');
+  const [search, setSearch] = useState('');
+
+  const filtered = products.filter(function(p) {
+    const matchCat = activeCategory === 'Semua' || p.category === activeCategory;
+    const matchDest = activeDest === 'Semua' || p.destination === activeDest;
+    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
+    return matchCat && matchDest && matchSearch;
+  });
+
+  function addToCart(product) {
+    dispatch({ type: 'ADD_TO_CART', product: product });
+    dispatch({ type: 'SHOW_TOAST', message: product.name + ' ditambahkan ke keranjang!', toastType: 'success' });
+  }
 
   return (
-    <div className="w-full min-h-screen text-slate-100 font-sans">
-      
+    <div className="w-full min-h-screen bg-[#F5F0FF] font-sans pb-32">
+      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md px-4 py-4 flex justify-between items-center shadow-sm">
+        <button onClick={function(){ navigate(-1); }} className="w-9 h-9 flex items-center justify-center rounded-full bg-purple-100 text-purple-700">
+          <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+        </button>
+        <h1 className="font-bold text-lg text-gray-800">Katalog Titipan</h1>
+        <button onClick={function(){ navigate('/shopping-cart'); }} className="relative w-9 h-9 flex items-center justify-center rounded-full bg-purple-100 text-purple-700">
+          <span className="material-symbols-outlined text-[20px]">shopping_bag</span>
+          {cartCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">{cartCount}</span>
+          )}
+        </button>
+      </header>
 
-<header className="bg-background w-full top-0 left-0 flex justify-between items-center px-screen-margin py-md sticky z-40">
-<div className="flex items-center gap-md">
-<div className="w-10 h-10 rounded-full overflow-hidden bg-surface-container shadow-sm border-2 border-white">
-<img className="w-full h-full object-cover" data-alt="A stylized 3D avatar portrait of a friendly Thai personal shopper with a soft matte finish, set against a clean purple background. The character has a cheerful expression, wearing a trendy streetwear cap, rendered in a high-quality claymorphic digital art style with soft studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTUPCwuYkUIHHQ5b9wS1XCN0uq6L1UOyx4FwrZ6Y8MkljNdYjexUVgFMfjEmazdmMyFIiNI1FiPMvtBaC33bDNM0DVnctrhccJ1qJHH_zHt20yIxEj9Njo-4Pk86QDfIZvUe0YClVX36mFSGS5w-t8mKXWj_4bUKTI055tXgVvuIWsGds2s7h_3exAZC74d7ZUhuE--OeKEcBCSarX7xMgzUd62ocnvuCeqYzrgzQ8eyuqQ9PXpisr_Q"/>
-</div>
-<h1 className="font-headline-md text-headline-md font-bold text-primary">Daily Flow</h1>
-</div>
-<button className="w-10 h-10 flex items-center justify-center rounded-full bg-surface transition-transform active:scale-95 hover:opacity-80">
-<span className="material-symbols-outlined text-primary" data-icon="search">search</span>
-</button>
-</header>
-
-<main className="px-screen-margin">
-
-<div className="py-xl">
-<h2 className="font-headline-lg text-headline-lg tracking-tight text-text-dark">Bangkok Sale Catalog</h2>
-<p className="text-text-secondary font-body-md mt-xs">Curated deals from Siam Square &amp; Beyond</p>
-</div>
-
-<nav className="flex overflow-x-auto gap-md hide-scrollbar pb-lg -mx-screen-margin px-screen-margin">
-<button className="bg-primary-container text-on-primary-container px-lg py-sm rounded-full font-label-pill text-label-pill whitespace-nowrap clay-shadow">
-                All
+      <div className="px-4 pt-4 space-y-3">
+        <div className="flex items-center bg-white rounded-2xl px-4 py-3 gap-3 shadow-sm">
+          <span className="material-symbols-outlined text-purple-400">search</span>
+          <input
+            className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
+            placeholder="Cari produk titipan..."
+            value={search}
+            onChange={function(e){ setSearch(e.target.value); }}
+          />
+          {search && (
+            <button onClick={function(){ setSearch(''); }} className="text-gray-400">
+              <span className="material-symbols-outlined text-[18px]">close</span>
             </button>
-<button className="bg-surface text-text-secondary px-lg py-sm rounded-full font-label-pill text-label-pill whitespace-nowrap shadow-sm border border-outline-variant/30">
-                Fashion
-            </button>
-<button className="bg-surface text-text-secondary px-lg py-sm rounded-full font-label-pill text-label-pill whitespace-nowrap shadow-sm border border-outline-variant/30">
-                Skincare
-            </button>
-<button className="bg-surface text-text-secondary px-lg py-sm rounded-full font-label-pill text-label-pill whitespace-nowrap shadow-sm border border-outline-variant/30">
-                Snacks
-            </button>
-<button className="bg-surface text-text-secondary px-lg py-sm rounded-full font-label-pill text-label-pill whitespace-nowrap shadow-sm border border-outline-variant/30">
-                Electronics
-            </button>
-</nav>
+          )}
+        </div>
 
-<div className="grid grid-cols-2 gap-grid-gap">
+        <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+          {DESTINATIONS.map(function(d) {
+            return (
+              <button
+                key={d}
+                onClick={function(){ setActiveDest(d); }}
+                className={'px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ' + (activeDest === d ? 'bg-purple-600 text-white shadow-lg shadow-purple-200' : 'bg-white text-gray-600')}
+              >{d}</button>
+            );
+          })}
+        </div>
 
-<div className="col-span-1 row-span-2 rounded-clay bg-[#FBBF24] p-lg flex flex-col justify-between clay-shadow relative overflow-hidden h-[340px]">
-<div className="clay-card-inner absolute inset-0 pointer-events-none"></div>
-<div className="z-10 h-full flex flex-col">
-<span className="bg-white/30 backdrop-blur-md px-sm py-xs rounded-full text-[10px] font-bold self-start text-dark uppercase tracking-wider">New Arrival</span>
-<div className="mt-xl flex-grow flex items-center justify-center">
-<img className="w-full h-auto drop-shadow-2xl" data-alt="A premium 3D claymorphic streetwear sneaker illustration with soft rounded edges and a matte plastic texture. The shoe features bold purple and white accents, floating slightly in mid-air with soft ambient occlusion shadows. The style is playful and tactile, matching a high-end digital toy aesthetic against a bright yellow background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0T7VEKmggwNY_cKA_B3MSNlotUL31bGfiF_Sghdp8jgqgQDATK88oL2heVDpXFhRIQuLAZsG2RR9KeGW3ZaPs4NhxuBdTkKrGKZoa1L--8m_rWqs0m1dbVYoDRmMhcI_BkG6pBzOmcy-h72a_Pc9Yen9mmLXHVlNiHA-64T5JaYcdDI2t_OKLuBbMcthkkeNp2g2Fc0HkFogdCfLok_rbqbDaam_8myPvi-lXRJhWAiWecwOyrROhHQ"/>
-</div>
-<div className="mt-auto">
-<h3 className="font-headline-md text-headline-md text-text-dark leading-tight">Streetwear Tee</h3>
-<p className="font-body-md text-text-dark/80 mt-xs">฿450 + 50 Fee</p>
-</div>
-</div>
-<button className="absolute bottom-md right-md w-11 h-11 bg-white rounded-full flex items-center justify-center clay-button transition-all active:scale-90 z-20">
-<span className="material-symbols-outlined text-text-dark font-bold">add</span>
-</button>
-</div>
+        <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+          {CATEGORIES.map(function(c) {
+            return (
+              <button
+                key={c}
+                onClick={function(){ setActiveCategory(c); }}
+                className={'px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ' + (activeCategory === c ? 'bg-purple-100 text-purple-700 border border-purple-300' : 'bg-white text-gray-500')}
+              >{c}</button>
+            );
+          })}
+        </div>
+      </div>
 
-<div className="col-span-1 rounded-clay bg-accent-blue p-lg flex flex-col justify-between clay-shadow relative overflow-hidden h-[164px]">
-<div className="clay-card-inner absolute inset-0 pointer-events-none"></div>
-<div className="z-10 flex flex-col justify-between h-full">
-<div className="flex justify-between items-start">
-<div className="w-16 h-16">
-<img className="w-full h-full object-contain" data-alt="A 3D claymorphic glass serum bottle with a white dropper cap, rendered in a soft matte finish. The bottle has a gentle blue tint and contains a translucent liquid. The lighting is soft and diffused, creating a calm and premium cosmetic vibe within a blue-themed digital interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqZVsKM60KFXMLz-g646xftbFsHW_NDqDB626oydYxbgZWaq5aEX3IfTtFAYPh4dY8nrpB4NrNSHV0rPkY3HRYl45O5Q9jVQNDwuK_tcv2fvB7gNJYiAaKZdKMD66AANSDtfadVQF4idGVzrvEBqq8-toWp5yKqWPvjr9rC00y_h-3XncJsfyR1FKzkXgjguJ7DHRLWlHiBa3MjUFtw4C0wSUofmxHt5I4b-TfbrhuH9aP0PdhyJezxQ"/>
-</div>
-</div>
-<div>
-<h3 className="font-label-pill text-label-pill text-text-dark">Glow Serum</h3>
-<p className="text-[12px] font-semibold text-text-dark/70">฿800 + 100 Fee</p>
-</div>
-</div>
-<button className="absolute bottom-md right-md w-11 h-11 bg-white rounded-full flex items-center justify-center clay-button transition-all active:scale-90 z-20">
-<span className="material-symbols-outlined text-text-dark font-bold">add</span>
-</button>
-</div>
-
-<div className="col-span-1 rounded-clay bg-accent-pink p-lg flex flex-col justify-between clay-shadow relative overflow-hidden h-[164px]">
-<div className="clay-card-inner absolute inset-0 pointer-events-none"></div>
-<div className="z-10 flex flex-col justify-between h-full">
-<div className="flex justify-between items-start">
-<div className="w-16 h-16">
-<img className="w-full h-full object-contain" data-alt="A 3D claymorphic bag of Thai seaweed snacks with a glossy but soft-touch finish. The packaging is stylized with vibrant green and red elements, appearing puffed up like a toy. It sits in a high-contrast environment with soft shadows, fitting a playful bento-grid design for a shopping app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCDtd9PaekmNRt6ApIMiSDwjCYfb23LO4Dpd3tYMAa_08gUppDuzsg_mX1gqvHu-cUF9ErkIxzXKvFYrvWZEnBcwlHLVkgf3oQocUAbdZT6jIDawwsuLHRip_0Nzy2xgp2-XVqfXohFo_NMqKms9EAbZmwHmwFD8C8QHWGjEW17n1Ukw9762jucUMyA_6CA_RXeR2CoBssV3HJyfnfHuv4L259R-VfGVFyWWaRUXLNLYLeG9XA7V8aOw"/>
-</div>
-</div>
-<div>
-<h3 className="font-label-pill text-label-pill text-text-dark">Spicy Seaweed</h3>
-<p className="text-[12px] font-semibold text-text-dark/70">฿120 + 30 Fee</p>
-</div>
-</div>
-<button className="absolute bottom-md right-md w-11 h-11 bg-white rounded-full flex items-center justify-center clay-button transition-all active:scale-90 z-20">
-<span className="material-symbols-outlined text-text-dark font-bold">add</span>
-</button>
-</div>
-
-<div className="col-span-2 rounded-clay bg-surface-container-high p-lg flex items-center justify-between clay-shadow relative overflow-hidden h-[100px]">
-<div className="clay-card-inner absolute inset-0 pointer-events-none"></div>
-<div className="z-10 flex items-center gap-lg">
-<div className="w-14 h-14 bg-white/50 rounded-xl flex items-center justify-center">
-<span className="material-symbols-outlined text-primary text-3xl" style={{fontVariationSettings: '\'FILL\' 1'}}>bolt</span>
-</div>
-<div>
-<h3 className="font-headline-md text-headline-md text-text-dark">Flash Sale Ends In</h3>
-<p className="text-primary font-bold text-lg">02:45:12</p>
-</div>
-</div>
-<button className="z-10 bg-inverse-surface text-white px-lg py-sm rounded-full font-label-pill transition-transform active:scale-95">
-                    View
-                 </button>
-</div>
-</div>
-</main>
-
-<nav className="fixed bottom-lg left-0 right-0 mx-auto z-50 flex justify-around items-center h-16 px-md bg-inverse-surface dark:bg-surface-container-highest shadow-2xl fixed bottom-lg left-1/2 -translate-x-1/2 w-[calc(100%-32px)] rounded-full">
-
-<a className="flex items-center justify-center bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container rounded-full w-12 h-12 active:scale-90 transition-all duration-200 ease-out hover:scale-110" href="#">
-<span className="material-symbols-outlined" data-icon="grid_view" style={{fontVariationSettings: '\'FILL\' 1'}}>grid_view</span>
-</a>
-<a className="flex items-center justify-center text-surface-variant dark:text-on-surface-variant w-12 h-12 active:scale-90 transition-all duration-200 ease-out hover:scale-110" href="#">
-<span className="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
-</a>
-<a className="flex items-center justify-center text-surface-variant dark:text-on-surface-variant w-12 h-12 active:scale-90 transition-all duration-200 ease-out hover:scale-110" href="#">
-<span className="material-symbols-outlined" data-icon="favorite">favorite</span>
-</a>
-<a className="flex items-center justify-center text-surface-variant dark:text-on-surface-variant w-12 h-12 active:scale-90 transition-all duration-200 ease-out hover:scale-110" href="#">
-<span className="material-symbols-outlined" data-icon="person">person</span>
-</a>
-</nav>
-
-
+      <div className="px-4 pt-4 grid grid-cols-2 gap-3">
+        {filtered.length === 0 && (
+          <div className="col-span-2 text-center py-16">
+            <span className="material-symbols-outlined text-5xl text-purple-200">search_off</span>
+            <p className="text-gray-400 mt-2 text-sm">Produk tidak ditemukan</p>
+          </div>
+        )}
+        {filtered.map(function(p) {
+          return (
+            <div key={p.id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-purple-50 flex flex-col">
+              <div className="relative">
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className="w-full h-36 object-cover cursor-pointer"
+                  onClick={function(){ navigate('/product-detail-order-form', { state: { product: p } }); }}
+                  onError={function(e){ e.target.src = 'https://placehold.co/300x200/EDE9FE/7C3AED?text=' + encodeURIComponent(p.name); }}
+                />
+                <span className="absolute top-2 left-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{p.destination}</span>
+              </div>
+              <div className="p-3 flex flex-col flex-1">
+                <p className="text-[11px] text-purple-500 font-semibold">{p.category}</p>
+                <h3 className="text-sm font-bold text-gray-800 leading-tight mt-0.5 mb-1">{p.name}</h3>
+                <div className="flex items-center gap-1 mb-2">
+                  <span className="material-symbols-outlined text-yellow-400 text-[14px]" style={{fontVariationSettings:"'FILL' 1"}}>star</span>
+                  <span className="text-xs text-gray-500">{p.rating}</span>
+                  <span className="text-xs text-gray-300 ml-1">• Stok {p.stock}</span>
+                </div>
+                <div className="mt-auto">
+                  <p className="text-xs text-gray-400">{p.currency} {p.price_original.toLocaleString('id-ID')}</p>
+                  <p className="text-base font-bold text-purple-700">Rp {p.price_idr.toLocaleString('id-ID')}</p>
+                  <p className="text-[10px] text-gray-400">+Rp {p.service_fee.toLocaleString('id-ID')} biaya jastip</p>
+                  <button
+                    onClick={function(){ addToCart(p); }}
+                    className="mt-2 w-full bg-purple-600 text-white rounded-2xl py-2 text-xs font-bold hover:bg-purple-700 active:scale-95 transition-all"
+                  >+ Tambah ke Keranjang</button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
